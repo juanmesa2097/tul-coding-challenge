@@ -1,6 +1,6 @@
 import { CartProduct } from './cart.model';
 
-export class GetCartProducts {
+export class FetchCartProducts {
   static readonly type = '[CART] Get';
   constructor() {}
 }

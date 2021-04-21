@@ -1,18 +1,42 @@
+import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { AddCartProduct, RemoveCartProduct } from './cart.actions';
-import { CartProduct, CartStateModel } from './cart.model';
+import {
+  AddCartProduct,
+  FetchCartProducts,
+  RemoveCartProduct,
+} from './cart.actions';
+import { CartProduct } from './cart.model';
 
-@State({
+interface CartStateModel {
+  cartProducts: CartProduct[];
+  isLoading: boolean;
+}
+
+@State<CartStateModel>({
   name: 'cart',
   defaults: {
     cartProducts: [],
+    isLoading: false,
   },
 })
+@Injectable()
 export class CartState {
   @Selector()
-  static getCartProducts(state: CartStateModel): CartProduct[] {
+  static fetchCartProducts(state: CartStateModel): CartProduct[] {
     return state.cartProducts;
   }
+
+  @Selector()
+  static isLoading(state: CartStateModel): boolean {
+    return state.isLoading;
+  }
+
+  @Action(FetchCartProducts)
+  fetch({
+    getState,
+    patchState,
+    setState,
+  }: StateContext<CartStateModel>): void {}
 
   @Action(AddCartProduct)
   add(

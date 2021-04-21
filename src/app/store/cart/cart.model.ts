@@ -1,6 +1,4 @@
-export class CartStateModel {
-  cartProducts!: CartProduct[];
-}
+import { Product } from '../products/product.model';
 
 export interface Cart {
   id: number;
@@ -9,9 +7,9 @@ export interface Cart {
 
 export interface CartProduct {
   id: number;
-  productId: number;
-  cartId: number;
   quantity: number;
+  productId: Product['id'];
+  cartId: Cart['id'];
 }
 
 export type CartStatus = 'Pending' | 'Completed';

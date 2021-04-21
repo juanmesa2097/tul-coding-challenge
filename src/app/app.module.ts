@@ -8,6 +8,7 @@ import { CoreModule } from './@core/core.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LayoutModule } from './components/layout/layout.module';
+import { stateList } from './store/state-list';
 
 @NgModule({
   declarations: [AppComponent],
@@ -16,7 +17,9 @@ import { LayoutModule } from './components/layout/layout.module';
     AppRoutingModule,
     CoreModule,
     LayoutModule,
-    NgxsModule.forRoot([], { developmentMode: !environment.production }),
+    NgxsModule.forRoot([...stateList], {
+      developmentMode: !environment.production,
+    }),
     NgxsReduxDevtoolsPluginModule.forRoot({
       disabled: environment.production,
     }),

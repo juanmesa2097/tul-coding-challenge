@@ -1,4 +1,3 @@
-export class GetProducts {
+export class FetchProducts {
   static readonly type = '[PRODUCTS] Get';
-  constructor() {}
 }

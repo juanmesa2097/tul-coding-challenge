@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Product } from '@app/store/products/product.model';
-import { Store } from '@ngxs/store';
+import { FetchProducts } from '@app/store/products/products.actions';
+import { ProductsState } from '@app/store/products/products.state';
+import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -8,11 +10,12 @@ import { Observable } from 'rxjs';
   styleUrls: ['./products.page.scss'],
 })
 export class ProductsPage implements OnInit {
-  products$!: Observable<Product[]>;
+  @Select(ProductsState.fetchProductsList) products$!: Observable<Product[]>;
+  @Select(ProductsState.isLoading) isLoading!: Observable<boolean>;
 
   constructor(private store: Store) {}
 
   ngOnInit(): void {
-    // this.products$ = this.store.select((state) => state.products.products);
+    this.store.dispatch(new FetchProducts());
   }
 }

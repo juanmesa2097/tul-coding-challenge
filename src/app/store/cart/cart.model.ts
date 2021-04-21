@@ -1,12 +1,12 @@
 import { Product } from '../products/product.model';
 
 export interface Cart {
-  id: number;
+  id: string;
   status: CartStatus;
 }
 
 export interface CartProduct {
-  id: number;
+  id: string;
   quantity: number;
   productId: Product['id'];
   cartId: Cart['id'];

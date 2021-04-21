@@ -1,10 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import {
-  AddCartProduct,
-  FetchCartProducts,
-  RemoveCartProduct,
-} from './cart.actions';
+import { CartActions } from './cart.actions';
 import { CartProduct } from './cart.model';
 
 interface CartStateModel {
@@ -31,26 +27,26 @@ export class CartState {
     return state.isLoading;
   }
 
-  @Action(FetchCartProducts)
+  @Action(CartActions.Fetch)
   fetch({
     getState,
     patchState,
     setState,
   }: StateContext<CartStateModel>): void {}
 
-  @Action(AddCartProduct)
+  @Action(CartActions.Add)
   add(
     { getState, patchState }: StateContext<CartStateModel>,
-    { payload }: AddCartProduct,
+    { payload }: CartActions.Add,
   ): void {
     const state = getState();
     patchState({ cartProducts: [...state.cartProducts, payload] });
   }
 
-  @Action(RemoveCartProduct)
+  @Action(CartActions.Remove)
   remove(
     { getState, patchState }: StateContext<CartStateModel>,
-    { payload }: RemoveCartProduct,
+    { payload }: CartActions.Remove,
   ): void {
     const state = getState();
     patchState({

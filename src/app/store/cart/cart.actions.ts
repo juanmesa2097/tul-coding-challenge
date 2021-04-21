@@ -1,16 +1,24 @@
 import { CartProduct } from './cart.model';
 
-export class FetchCartProducts {
-  static readonly type = '[CART] Get';
-  constructor() {}
-}
+export namespace CartActions {
+  enum ActionType {
+    Fetch = '[Cart] Get',
+    Add = '[Cart] Add',
+    Remove = '[Cart] Remove',
+  }
 
-export class AddCartProduct {
-  static readonly type = '[CART] Add';
-  constructor(public payload: CartProduct) {}
-}
+  export class Fetch {
+    static readonly type = ActionType.Fetch;
+    constructor() {}
+  }
 
-export class RemoveCartProduct {
-  static readonly type = '[CART] Remove';
-  constructor(public payload: number) {}
+  export class Add {
+    static readonly type = ActionType.Add;
+    constructor(public payload: CartProduct) {}
+  }
+
+  export class Remove {
+    static readonly type = ActionType.Remove;
+    constructor(public payload: string) {}
+  }
 }

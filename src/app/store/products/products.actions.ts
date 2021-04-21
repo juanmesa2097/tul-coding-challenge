@@ -1,9 +1,9 @@
 export namespace ProductsActions {
-  enum ActionTypes {
-    Get = '[Products] Fetch',
+  enum ActionType {
+    Fetch = '[Products] Fetch',
   }
 
   export class Fetch {
-    static readonly type = ActionTypes.Get;
+    static readonly type = ActionType.Fetch;
   }
 }

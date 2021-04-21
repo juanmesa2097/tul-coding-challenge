@@ -1,8 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+import { AngularFireModule } from '@angular/fire';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { stateList } from '@app/store/state-list';
 import { environment } from '@environments/environment';
+import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
+import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
+import { NgxsModule } from '@ngxs/store';
 import { JwtInterceptor, ServerErrorInterceptor } from './interceptors';
 
 @NgModule({
@@ -13,6 +18,16 @@ import { JwtInterceptor, ServerErrorInterceptor } from './interceptors';
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
     }),
+    NgxsModule.forRoot([...stateList], {
+      developmentMode: !environment.production,
+    }),
+    NgxsReduxDevtoolsPluginModule.forRoot({
+      disabled: environment.production,
+    }),
+    NgxsLoggerPluginModule.forRoot({
+      disabled: environment.production,
+    }),
+    AngularFireModule.initializeApp(environment.firebase),
   ],
   providers: [
     {

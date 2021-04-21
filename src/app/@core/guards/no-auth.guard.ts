@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, UrlTree } from '@angular/router';
-import { AuthService } from '@app/pages/+auth/_services/auth.service';
 import { Path } from '@core/structs';
 import { Observable } from 'rxjs';
 
@@ -8,17 +7,17 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class NoAuthGuard implements CanActivate {
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(private router: Router) {}
 
   canActivate():
     | Observable<boolean | UrlTree>
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    const isLoggedIn = this.authService.isLoggedIn;
+    const isLoggedIn = true;
 
     if (isLoggedIn) {
-      this.router.navigate([Path.App]);
+      this.router.navigate([Path.Products]);
       return false;
     }
 

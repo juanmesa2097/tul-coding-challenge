@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from '@app/pages/+auth/_services/auth.service';
 import { Path } from '@core/structs';
 
 @Component({
@@ -10,20 +9,15 @@ import { Path } from '@core/structs';
 export class SignInPage implements OnInit {
   returnUrl: string;
 
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private authService: AuthService,
-  ) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute) {
     this.returnUrl =
       this.activatedRoute.snapshot.queryParamMap.get('returnUrl') ||
-      `/${Path.App}`;
+      `/${Path.Products}`;
   }
 
   ngOnInit(): void {}
 
   onClickSignIn(): void {
-    this.authService.signIn();
     this.router.navigate([this.returnUrl]);
   }
 }

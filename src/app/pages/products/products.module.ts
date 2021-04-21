@@ -1,22 +1,22 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { OverviewPage } from './overview.page';
+import { ProductsPage } from './products.page';
 
 @NgModule({
-  declarations: [OverviewPage],
+  declarations: [ProductsPage],
   imports: [
     CommonModule,
     RouterModule.forChild([
       {
         path: '',
-        component: OverviewPage,
+        component: ProductsPage,
         data: {
-          title: 'Users overview',
+          title: 'List of products',
           robots: 'noindex, nofollow',
         },
       },
     ]),
   ],
 })
-export class OverviewModule {}
+export class ProductsModule {}

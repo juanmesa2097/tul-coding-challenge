@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Path } from '@app/@core/structs';
-import { AuthService } from '@app/pages/+auth/_services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -12,12 +11,11 @@ import { AuthService } from '@app/pages/+auth/_services/auth.service';
 export class HeaderComponent implements OnInit {
   path = Path;
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(private router: Router) {}
 
   ngOnInit(): void {}
 
   onClickSignOut(): void {
-    this.authService.signOut();
     this.router.navigate(['/', Path.SignIn]);
   }
 }

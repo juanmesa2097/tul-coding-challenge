@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Product } from '@app/store/products/product.model';
-import { FetchProducts } from '@app/store/products/products.actions';
+import { ProductsActions } from '@app/store/products/products.actions';
 import { ProductsState } from '@app/store/products/products.state';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -16,6 +16,6 @@ export class ProductsPage implements OnInit {
   constructor(private store: Store) {}
 
   ngOnInit(): void {
-    this.store.dispatch(new FetchProducts());
+    this.store.dispatch(new ProductsActions.Fetch());
   }
 }

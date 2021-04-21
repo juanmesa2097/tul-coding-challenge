@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { FirestoreCollection } from '@app/@core/structs/firestore-collection.enum';
+import { ProductsFirestore } from '@app/services/products-firestore.service';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { Product } from './product.model';
-import { FetchProducts } from './products.actions';
+import { ProductsActions } from './products.actions';
 
 interface ProductsStateModel {
   products: Product[];
@@ -21,7 +20,7 @@ interface ProductsStateModel {
 })
 @Injectable()
 export class ProductsState {
-  constructor(private firestore: AngularFirestore) {}
+  constructor(private productsFS: ProductsFirestore) {}
 
   @Selector()
   static fetchProductsList(state: ProductsStateModel): Product[] {
@@ -33,18 +32,15 @@ export class ProductsState {
     return state.isLoading;
   }
 
-  @Action(FetchProducts)
+  @Action(ProductsActions.Fetch)
   fetch({
     getState,
     patchState,
-    setState,
-  }: StateContext<ProductsStateModel>): Observable<ProductsStateModel> {
-    const state = getState();
-    patchState({ ...state, isLoading: true });
+  }: StateContext<ProductsStateModel>): Observable<Product[]> {
+    patchState({ ...getState(), isLoading: true });
 
-    return this.firestore
-      .collection<Product>(FirestoreCollection.Products)
-      .valueChanges()
-      .pipe(map((products) => setState({ products, isLoading: false })));
+    return this.productsFS
+      .collectionOnce$()
+      .pipe(tap((products) => patchState({ products, isLoading: false })));
   }
 }

@@ -1,9 +1,18 @@
-<div class="h-full bg-white dark:bg-gray-800 dark:text-gray-50">
+<tui-theme-night></tui-theme-night>
+
+<tui-root
+  tuiMode="onDark"
+  class="h-full bg-white dark:bg-gray-900 dark:text-gray-50"
+>
+  <!-- logged in -->
   <app-layout *ngIf="isLoggedIn$ | async; else notAuthorized">
     <router-outlet></router-outlet>
   </app-layout>
+  <!-- /logged in -->
 
+  <!-- unauthorized -->
   <ng-template #notAuthorized>
     <router-outlet></router-outlet>
   </ng-template>
-</div>
+  <!-- /unauthorized -->
+</tui-root>

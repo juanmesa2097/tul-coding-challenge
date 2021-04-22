@@ -1,9 +1,8 @@
 module.exports = {
   prefix: '',
-  mode: 'jit',
   purge: {
     enabled: process.env.NODE_ENV === 'production',
-    content: ['./src/**/*.{html,scss,ts}'],
+    content: ['./src/**/*.{html,ts}'],
   },
   darkMode: 'class',
   theme: {
@@ -15,14 +14,28 @@ module.exports = {
       center: true,
       padding: '1.5rem',
     },
-    extends: {
-      color: {
+    extend: {
+      colors: {
         inherit: 'inherit',
         transparent: 'transparent',
         current: 'currentColor',
+
+        gray: {
+          100: 'var(--tui-base-09)',
+          200: 'var(--tui-base-08)',
+          300: 'var(--tui-base-07)',
+          400: 'var(--tui-base-06)',
+          500: 'var(--tui-base-05)',
+          600: 'var(--tui-base-04)',
+          700: 'var(--tui-base-03)',
+          800: 'var(--tui-base-02)',
+          900: 'var(--tui-base-01)',
+        },
       },
     },
   },
-  variants: {},
+  variants: {
+    extend: {},
+  },
   plugins: [],
 };

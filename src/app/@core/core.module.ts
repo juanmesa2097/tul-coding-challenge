@@ -10,6 +10,7 @@ import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { NgxsModule } from '@ngxs/store';
+import { iconsPathFactory, TUI_ICONS_PATH } from '@taiga-ui/core';
 import { JwtInterceptor, ServerErrorInterceptor } from './interceptors';
 
 @NgModule({
@@ -41,6 +42,10 @@ import { JwtInterceptor, ServerErrorInterceptor } from './interceptors';
       multi: true,
     },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    {
+      provide: TUI_ICONS_PATH,
+      useValue: iconsPathFactory('assets/taiga-ui/icons/'),
+    },
   ],
 })
 export class CoreModule {}

@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { NoAuthGuard } from '@core/guards';
 import { Path } from '@core/structs';
 import { NotFoundModule } from '@pages/_not-found/not-found.module';
 
@@ -10,7 +9,7 @@ const routes: Routes = [
   // Auth
   {
     path: Path.Auth,
-    canActivate: [NoAuthGuard],
+    // canActivate: [NoAuthGuard],
     children: [
       {
         path: Path.SignIn,
@@ -24,6 +23,13 @@ const routes: Routes = [
         loadChildren: () =>
           import('@pages/+auth/sign-up/sign-up.module').then(
             (m) => m.SignUpModule,
+          ),
+      },
+      {
+        path: Path.SignOut,
+        loadChildren: () =>
+          import('@pages/+auth/sign-out/sign-out.module').then(
+            (m) => m.SignOutModule,
           ),
       },
     ],

@@ -4,9 +4,11 @@ import { NgModule } from '@angular/core';
 import { AngularFireModule } from '@angular/fire';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { stateList } from '@app/store/state-list';
+import { StateName } from '@app/store/state-name.enum';
 import { environment } from '@environments/environment';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
+import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { NgxsModule } from '@ngxs/store';
 import { JwtInterceptor, ServerErrorInterceptor } from './interceptors';
 
@@ -20,6 +22,9 @@ import { JwtInterceptor, ServerErrorInterceptor } from './interceptors';
     }),
     NgxsModule.forRoot([...stateList], {
       developmentMode: !environment.production,
+    }),
+    NgxsStoragePluginModule.forRoot({
+      key: [StateName.User],
     }),
     NgxsReduxDevtoolsPluginModule.forRoot({
       disabled: environment.production,

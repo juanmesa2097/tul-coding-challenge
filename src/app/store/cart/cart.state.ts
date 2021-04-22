@@ -4,6 +4,7 @@ import { FirestoreCollection } from '@app/@core/structs/firestore-collection.enu
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { StateName } from '../state-name.enum';
 import { CartActions } from './cart.actions';
 import { CartProduct } from './cart.model';
 
@@ -13,7 +14,7 @@ interface CartStateModel {
 }
 
 @State<CartStateModel>({
-  name: 'cart',
+  name: StateName.Cart,
   defaults: {
     cartProducts: [],
     isLoading: false,

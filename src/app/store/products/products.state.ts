@@ -4,8 +4,9 @@ import { FirestoreCollection } from '@app/@core/structs/firestore-collection.enu
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { take, tap } from 'rxjs/operators';
-import { Product } from './product.model';
+import { StateName } from '../state-name.enum';
 import { ProductsActions } from './products.actions';
+import { Product } from './products.model';
 
 interface ProductsStateModel {
   products: Product[];
@@ -13,7 +14,7 @@ interface ProductsStateModel {
 }
 
 @State<ProductsStateModel>({
-  name: 'products',
+  name: StateName.Products,
   defaults: {
     products: [],
     isLoading: false,

@@ -6,6 +6,7 @@ export enum Path {
   Auth = '',
   SignIn = 'sign-in',
   SignUp = 'sign-up',
+  SignOut = 'sign-out',
 
   // App base url
   Products = 'products',

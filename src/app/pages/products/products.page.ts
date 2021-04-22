@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Product } from '@app/store/products/product.model';
 import { ProductsActions } from '@app/store/products/products.actions';
+import { Product } from '@app/store/products/products.model';
 import { ProductsState } from '@app/store/products/products.state';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';

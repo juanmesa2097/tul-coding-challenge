@@ -24,7 +24,7 @@ import { JwtInterceptor, ServerErrorInterceptor } from './interceptors';
       developmentMode: !environment.production,
     }),
     NgxsStoragePluginModule.forRoot({
-      key: [StateName.User],
+      key: [StateName.User, StateName.Cart],
     }),
     NgxsReduxDevtoolsPluginModule.forRoot({
       disabled: environment.production,

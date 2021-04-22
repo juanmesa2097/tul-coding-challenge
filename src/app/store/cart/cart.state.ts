@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore, QuerySnapshot } from '@angular/fire/firestore';
 import { FirestoreCollection } from '@app/@core/structs/firestore-collection.enum';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -42,11 +42,11 @@ export class CartState {
     patchState({ ...getState(), isLoading: true });
 
     return this.firestore
-      .collection<CartProduct>(FirestoreCollection.CartProducts)
+      .collection<QuerySnapshot<CartProduct[]>>(
+        FirestoreCollection.CartProducts,
+      )
       .valueChanges()
-      .pipe(
-        tap((cartProducts) => patchState({ cartProducts, isLoading: false })),
-      );
+      .pipe(tap(console.log));
   }
 
   @Action(CartActions.Add)

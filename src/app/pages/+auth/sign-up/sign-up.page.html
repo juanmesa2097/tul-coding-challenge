@@ -1,2 +1,18 @@
-<button (click)="onClickSignIn()">Sign in</button>
-<button (click)="onClickSignUp()">Sign up</button>
+<div class="max-w-lg mx-auto mt-12">
+  <!-- header -->
+  <h3>Crear una cuenta</h3>
+  <!-- /header -->
+
+  <!-- form -->
+  <app-register-form (signUp)="onSignUp($event)"></app-register-form>
+  <!-- /form -->
+
+  <!-- link -->
+  <span class="block mt-2">
+    ¿Ya tiene una cuenta?
+    <a class="text-blue-400 cursor-pointer" [routerLink]="['/', path.SignIn]">
+      Iniciar sesión
+    </a>
+  </span>
+  <!-- /link -->
+</div>

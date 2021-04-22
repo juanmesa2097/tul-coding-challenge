@@ -19,9 +19,7 @@ export class SignOutPage implements OnInit, OnDestroy {
     this.store
       .dispatch(new UserActions.SignOut())
       .pipe(takeUntil(this.destroy$))
-      .subscribe(() =>
-        this.store.dispatch(new Navigate([Path.Auth, Path.SignIn])),
-      );
+      .subscribe(() => this.store.dispatch(new Navigate(['/', Path.SignIn])));
   }
 
   ngOnDestroy(): void {

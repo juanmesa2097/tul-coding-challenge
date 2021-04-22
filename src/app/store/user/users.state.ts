@@ -66,15 +66,15 @@ export class UserState {
   @Action(UserActions.SignUp)
   async signUp(
     { getState, patchState }: StateContext<UserStateModel>,
-    { payload }: UserActions.SignUp,
+    { payload: { email, password, name, lastname } }: UserActions.SignUp,
   ): Promise<void> {
     const state = getState();
     patchState({ ...state, isLoading: true });
 
     try {
       const { user } = await this.fireAuth.createUserWithEmailAndPassword(
-        payload.email,
-        payload.password,
+        email,
+        password,
       );
 
       await this.firestore
@@ -82,7 +82,9 @@ export class UserState {
         .doc(user?.uid)
         .set({
           id: user?.uid,
-          ...payload,
+          email,
+          name,
+          lastname,
         });
     } catch (error) {
       console.log(error);

@@ -1,0 +1,23 @@
+<div class="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-3">
+  <tui-island *ngFor="let product of products">
+    <img
+      src="../../../../assets/img-placeholder.png"
+      alt="Image placeholder"
+      class="object-cover w-full h-40"
+    />
+    <h3 class="mt-6 tui-island__title">{{ product.name }}</h3>
+    <p class="h-12 line-clamp-2">
+      {{ product.description }}
+    </p>
+
+    <button
+      tuiButton
+      type="button"
+      class="outline-none tui-island__footer-button"
+      appearance="flat"
+      size="m"
+    >
+      Agregar al carrito
+    </button>
+  </tui-island>
+</div>

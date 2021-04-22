@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { ProductsActions } from '@app/store/products/products.actions';
 import { Product } from '@app/store/products/products.model';
 import { ProductsState } from '@app/store/products/products.state';
@@ -13,7 +14,11 @@ export class ProductsPage implements OnInit {
   @Select(ProductsState.fetchProductsList) products$!: Observable<Product[]>;
   @Select(ProductsState.isLoading) isLoading!: Observable<boolean>;
 
-  constructor(private store: Store) {}
+  breadcrumbs = [];
+
+  constructor(private activatedRoute: ActivatedRoute, private store: Store) {
+    this.breadcrumbs = this.activatedRoute.snapshot.data.breadcrumbs;
+  }
 
   ngOnInit(): void {
     this.store.dispatch(new ProductsActions.Fetch());

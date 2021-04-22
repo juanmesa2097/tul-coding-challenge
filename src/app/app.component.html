@@ -1,4 +1,4 @@
-<tui-root class="h-full bg-gray-300 dark:bg-gray-900 dark:text-gray-50">
+<tui-root>
   <!-- logged in -->
   <app-layout *ngIf="isLoggedIn$ | async; else notAuthorized">
     <router-outlet></router-outlet>

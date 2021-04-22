@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { FirestoreCollection } from '@app/@core/structs/firestore-collection.enum';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { CartActions } from './cart.actions';
 import { CartProduct } from './cart.model';
 
@@ -17,6 +21,8 @@ interface CartStateModel {
 })
 @Injectable()
 export class CartState {
+  constructor(private firestore: AngularFirestore) {}
+
   @Selector()
   static fetchCartProducts(state: CartStateModel): CartProduct[] {
     return state.cartProducts;
@@ -31,8 +37,16 @@ export class CartState {
   fetch({
     getState,
     patchState,
-    setState,
-  }: StateContext<CartStateModel>): void {}
+  }: StateContext<CartStateModel>): Observable<CartProduct[]> {
+    patchState({ ...getState(), isLoading: true });
+
+    return this.firestore
+      .collection<CartProduct>(FirestoreCollection.CartProducts)
+      .valueChanges()
+      .pipe(
+        tap((cartProducts) => patchState({ cartProducts, isLoading: false })),
+      );
+  }
 
   @Action(CartActions.Add)
   add(

@@ -35,6 +35,11 @@ const routes: Routes = [
       import('@pages/products/products.module').then((m) => m.ProductsModule),
   },
   {
+    path: Path.Cart,
+    loadChildren: () =>
+      import('@pages/cart/cart.module').then((m) => m.CartModule),
+  },
+  {
     path: '**',
     loadChildren: () =>
       import('@pages/_not-found/not-found.module').then(

@@ -5,7 +5,6 @@ import { AngularFireModule } from '@angular/fire';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { stateList } from '@app/store/state-list';
 import { environment } from '@environments/environment';
-import { NgxsFirestoreModule } from '@ngxs-labs/firestore-plugin';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsModule } from '@ngxs/store';
@@ -28,7 +27,6 @@ import { JwtInterceptor, ServerErrorInterceptor } from './interceptors';
     NgxsLoggerPluginModule.forRoot({
       disabled: environment.production,
     }),
-    NgxsFirestoreModule.forRoot(),
     AngularFireModule.initializeApp(environment.firebase),
   ],
   providers: [

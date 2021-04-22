@@ -9,4 +9,5 @@ export enum Path {
 
   // App base url
   Products = 'products',
+  Cart = 'cart',
 }

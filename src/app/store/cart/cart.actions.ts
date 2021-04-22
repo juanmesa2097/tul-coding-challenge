@@ -2,7 +2,7 @@ import { CartProduct } from './cart.model';
 
 export namespace CartActions {
   enum ActionType {
-    Fetch = '[Cart] Get',
+    Fetch = '[Cart] Fetch',
     Add = '[Cart] Add',
     Remove = '[Cart] Remove',
   }

@@ -9,6 +9,7 @@ export enum Path {
   SignOut = 'sign-out',
 
   // App base url
+  App = '',
   Products = 'products',
   Cart = 'cart',
 }

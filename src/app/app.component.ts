@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { SeoService } from '@core/services/seo';
 import { ThemeService } from '@core/services/theme';
+import { Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
+import { UserState } from './store/user/users.state';
 
 @Component({
   selector: 'app-root',
@@ -9,7 +11,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  isLoggedIn$!: Observable<boolean>;
+  @Select(UserState.isLoggedIn) isLoggedIn$!: Observable<boolean>;
 
   constructor(
     private seoService: SeoService,

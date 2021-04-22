@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FirestoreCollection } from '@app/@core/structs/firestore-collection.enum';
-import { Action, State, StateContext } from '@ngxs/store';
+import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { StateName } from '../state-name.enum';
 import { UserActions } from './users.actions';
 import { User } from './users.model';
@@ -30,19 +30,34 @@ export class UserState {
     private firestore: AngularFirestore,
   ) {}
 
+  @Selector()
+  static isLoggedIn({ user, accessToken }: UserStateModel): boolean {
+    return !!user && !!accessToken;
+  }
+
+  @Selector()
+  static token({ accessToken }: UserStateModel): string | null {
+    return accessToken;
+  }
+
+  @Selector()
+  static user({ user }: UserStateModel): User | null {
+    return user;
+  }
+
   @Action(UserActions.SignIn)
   async signIn(
     { getState, patchState }: StateContext<UserStateModel>,
-    { email, password }: UserActions.SignIn,
-  ): Promise<void> {
+    { payload }: UserActions.SignIn,
+  ): Promise<boolean> {
     const state = getState();
     patchState({ ...state, isLoading: true });
-
+    console.log(payload);
     try {
       // Signs in and gets token id
       const { user } = await this.fireAuth.signInWithEmailAndPassword(
-        email,
-        password,
+        payload.email,
+        payload.password,
       );
 
       const token = await user?.getIdToken(true);
@@ -57,9 +72,11 @@ export class UserState {
       ).data() as User;
 
       patchState({ user: userData, accessToken: token, isLoading: false });
+      return true;
     } catch (error) {
       console.log(error);
       patchState({ ...state, error: error.message });
+      return false;
     }
   }
 
@@ -90,5 +107,15 @@ export class UserState {
       console.log(error);
       patchState({ ...state, isLoading: false, error: error.message });
     }
+  }
+
+  @Action(UserActions.SignOut)
+  signOut({ setState }: StateContext<UserStateModel>): void {
+    setState({
+      user: null,
+      accessToken: null,
+      isLoading: false,
+      error: null,
+    });
   }
 }

@@ -2,7 +2,7 @@
   <div class="flex justify-between mb-4 text-base w-96">
     <span class="block w-1/2"> Subtotal </span>
     <span class="w-1/2 ml-12 font-bold text-right">
-      {{ '100000' | currency }}
+      {{ subTotal | currency }}
     </span>
   </div>
   <div
@@ -10,13 +10,13 @@
   >
     <span class="block w-1/2"> Envío </span>
     <span class="w-1/2 ml-12 font-bold text-right">
-      {{ '10000' | currency }}
+      {{ shippingCost | currency }}
     </span>
   </div>
   <div class="flex justify-between pb-4 mb-4 text-base w-96">
     <span class="block w-1/2"> Total (iva incluído) </span>
     <span class="w-1/2 ml-12 font-bold text-right">
-      {{ '110000' | currency }}
+      {{ grandTotal | currency }}
     </span>
   </div>
   <button tuiButton appearance="primary" class="outline-none">

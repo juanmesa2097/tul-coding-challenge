@@ -79,16 +79,14 @@ export class CartProductsState {
   ): Promise<void> {
     const state = getState();
     patchState({ ...state, isLoading: true });
-    console.log(payload);
+
     try {
       await this.firestore.collection(FirestoreCollection.CartProducts).add({
         ...payload,
         cartId: this.firestore
           .collection(FirestoreCollection.Cart)
           .doc(payload.cartId).ref,
-        productId: this.firestore
-          .collection(FirestoreCollection.Products)
-          .doc(payload.productId).ref,
+        productId: payload.productId.trim(),
       });
 
       patchState({

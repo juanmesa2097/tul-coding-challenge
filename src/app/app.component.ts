@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { SeoService } from '@core/services/seo';
 import { ThemeService } from '@core/services/theme';
 import { Store } from '@ngxs/store';
+import { CartProductsActions } from './store/cart-products/cart-products.actions';
 import { CartActions } from './store/cart/cart.actions';
+import { CartState } from './store/cart/cart.state';
 import { UserState } from './store/user/users.state';
 
 @Component({
@@ -32,6 +34,12 @@ export class AppComponent implements OnInit {
 
         if (userId) {
           this.store.dispatch(new CartActions.Fetch(userId));
+
+          const cartId = this.store.selectSnapshot(CartState.cartId);
+
+          if (cartId) {
+            this.store.dispatch(new CartProductsActions.Fetch(cartId));
+          }
         }
       }
     });

@@ -16,13 +16,16 @@
     size="xxl"
     [showLoader]="(isLoading$ | async) || false"
   >
-    <!-- cart block -->
-    <app-cart-items
-      *ngIf="products.length; else noCartItems"
-      [cartProducts]="products"
-    ></app-cart-items>
+    <ng-container *ngIf="products.length; else noCartItems">
+      <!-- cart block -->
+      <app-cart-items [products]="products"></app-cart-items>
 
-    <app-cart-summary></app-cart-summary>
+      <app-cart-summary
+        [shippingCost]="(shippingCost$ | async) || 0"
+        [subTotal]="(subTotal$ | async) || 0"
+        [grandTotal]="(grandTotal$ | async) || 0"
+      ></app-cart-summary>
+    </ng-container>
 
     <!-- cart block -->
 

@@ -7,6 +7,7 @@ import { stateList } from '@app/store/state-list';
 import { StateName } from '@app/store/state-name.enum';
 import { environment } from '@environments/environment';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
+import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { NgxsModule } from '@ngxs/store';
 import { iconsPathFactory, TUI_ICONS_PATH } from '@taiga-ui/core';
@@ -30,15 +31,14 @@ import { maxLengthValidator, minLengthValidator } from './utils';
         `${StateName.User}.user`,
         `${StateName.User}.accessToken`,
         `${StateName.Cart}.cart.id`,
-        `${StateName.CartProducts}.cartProducts`,
       ],
     }),
     NgxsReduxDevtoolsPluginModule.forRoot({
       disabled: environment.production,
     }),
-    // NgxsLoggerPluginModule.forRoot({
-    //   disabled: environment.production,
-    // }),
+    NgxsLoggerPluginModule.forRoot({
+      disabled: environment.production,
+    }),
     AngularFireModule.initializeApp(environment.firebase),
   ],
   providers: [

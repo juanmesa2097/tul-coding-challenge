@@ -13,7 +13,7 @@ import { Product } from '@app/store/products/products.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CartItemsComponent implements OnInit {
-  @Input() cartProducts!: Product[];
+  @Input() products!: Product[];
 
   constructor() {}
 

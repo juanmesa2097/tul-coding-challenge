@@ -28,6 +28,7 @@ export class ProductsPage implements OnInit {
 
   ngOnInit(): void {
     const user = this.store.selectSnapshot(UserState.user);
+    console.log(user);
 
     this.store.dispatch(new ProductsActions.Fetch());
 

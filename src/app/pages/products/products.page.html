@@ -17,7 +17,7 @@
   <tui-loader
     [overlay]="true"
     size="xxl"
-    [showLoader]="(isLoading | async) || false"
+    [showLoader]="(isLoading$ | async) || false"
   >
     <app-products-list [products]="products$ | async"></app-products-list>
   </tui-loader>

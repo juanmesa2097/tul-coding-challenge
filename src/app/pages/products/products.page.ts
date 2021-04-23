@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
 })
 export class ProductsPage implements OnInit {
   @Select(ProductsState.fetchProductsList) products$!: Observable<Product[]>;
-  @Select(ProductsState.isLoading) isLoading!: Observable<boolean>;
+  @Select(ProductsState.isLoading) isLoading$!: Observable<boolean>;
 
   breadcrumbs = [];
 

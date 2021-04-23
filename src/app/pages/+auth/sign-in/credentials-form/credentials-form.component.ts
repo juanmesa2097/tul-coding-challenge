@@ -6,6 +6,7 @@ import {
   Output,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { validateForm } from '@app/@core/utils';
 import { LoginCredentials } from '@app/store/user/users.model';
 
 @Component({
@@ -17,30 +18,21 @@ import { LoginCredentials } from '@app/store/user/users.model';
 export class CredentialsFormComponent implements OnInit {
   @Output() signIn = new EventEmitter<LoginCredentials>();
 
-  errorMsg!: string;
-  loading = false;
-
   credentialsForm!: FormGroup;
 
   constructor(private fb: FormBuilder) {
     this.credentialsForm = this.fb.group({
-      email: [
-        'juanmesa2097@gmail.com',
-        [Validators.required, Validators.email],
-      ],
-      password: ['televition', [Validators.required]],
+      email: [null, [Validators.required, Validators.email]],
+      password: [null, [Validators.required]],
     });
   }
 
   ngOnInit(): void {}
 
   onSubmit(): void {
-    const { valid, value, controls } = this.credentialsForm;
+    const { valid, value } = this.credentialsForm;
 
-    for (const control in controls) {
-      this.credentialsForm.controls[control].markAsDirty();
-      this.credentialsForm.controls[control].updateValueAndValidity();
-    }
+    validateForm(this.credentialsForm);
 
     if (valid) {
       this.signIn.emit(value);

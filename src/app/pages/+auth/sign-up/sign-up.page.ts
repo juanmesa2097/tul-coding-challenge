@@ -3,9 +3,10 @@ import { Router } from '@angular/router';
 import { Path } from '@app/@core/structs';
 import { UserActions } from '@app/store/user/users.actions';
 import { User } from '@app/store/user/users.model';
-import { Store } from '@ngxs/store';
+import { UserState } from '@app/store/user/users.state';
+import { Select, Store } from '@ngxs/store';
 import { TuiNotification, TuiNotificationsService } from '@taiga-ui/core';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
@@ -13,7 +14,11 @@ import { takeUntil } from 'rxjs/operators';
   styleUrls: ['./sign-up.page.scss'],
 })
 export class SignUpPage implements OnInit, OnDestroy {
+  @Select(UserState.isLoading) isLoading$!: Observable<boolean>;
+  @Select(UserState.error) error$!: Observable<string>;
+
   path = Path;
+  status: TuiNotification = TuiNotification.Error;
 
   private destroy$ = new Subject();
 
@@ -34,10 +39,12 @@ export class SignUpPage implements OnInit, OnDestroy {
     this.store
       .dispatch(new UserActions.SignUp(user))
       .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.showSuccessMessage();
-
-        setTimeout(() => this.router.navigate(['/', Path.SignIn]), 2000);
+      .subscribe(({ user }) => {
+        console.log(user);
+        if (user.error === null) {
+          this.showSuccessMessage();
+          setTimeout(() => this.router.navigate(['/', Path.SignIn]), 2000);
+        }
       });
   }
 

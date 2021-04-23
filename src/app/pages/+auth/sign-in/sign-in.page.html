@@ -1,18 +1,38 @@
 <div class="max-w-lg mx-auto mt-12">
-  <!-- header -->
-  <h3>Iniciar sesión</h3>
-  <!-- /header -->
+  <tui-loader
+    [overlay]="true"
+    size="xl"
+    [showLoader]="(isLoading$ | async) || false"
+  >
+    <img
+      src="../../../assets/logo_tul.svg"
+      alt="TUL brand"
+      class="block mb-6"
+    />
 
-  <!-- form -->
-  <app-credentials-form (signIn)="onSignIn($event)"></app-credentials-form>
-  <!-- /form -->
+    <!-- header -->
+    <h3 class="mb-2">Iniciar sesión</h3>
+    <!-- /header -->
 
-  <!-- link -->
-  <span class="block mt-2">
-    ¿Todavía no tiene una cuenta?
-    <a class="text-blue-400 cursor-pointer" [routerLink]="['/', path.SignUp]">
-      Crear cuenta
-    </a>
-  </span>
-  <!-- /link -->
+    <tui-notification
+      *ngIf="error$ | async as error"
+      [status]="status"
+      class="my-2"
+    >
+      {{error}}
+    </tui-notification>
+
+    <!-- form -->
+    <app-credentials-form (signIn)="onSignIn($event)"></app-credentials-form>
+    <!-- /form -->
+
+    <!-- link -->
+    <span class="block mt-2">
+      ¿Todavía no tiene una cuenta?
+      <a class="text-blue-400 cursor-pointer" [routerLink]="['/', path.SignUp]">
+        Crear cuenta
+      </a>
+    </span>
+    <!-- /link -->
+  </tui-loader>
 </div>

@@ -29,7 +29,6 @@
     "@angular/platform-browser-dynamic": "~11.2.8",
     "@angular/router": "~11.2.8",
     "@angular/service-worker": "~11.2.8",
-    "@ngxs/router-plugin": "^3.7.1",
     "@ngxs/storage-plugin": "^3.7.1",
     "@ngxs/store": "^3.7.1",
     "@taiga-ui/cdk": "^2.7.0",

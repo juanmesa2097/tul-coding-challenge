@@ -10,7 +10,7 @@ import { User } from './users.model';
 export interface UserStateModel {
   user: User | null;
   accessToken: string | null;
-  isLoading: boolean | null;
+  isLoading: boolean;
   error: string | null;
 }
 
@@ -31,8 +31,8 @@ export class UserState {
   ) {}
 
   @Selector()
-  static isLoggedIn({ user, accessToken }: UserStateModel): boolean {
-    return !!user && !!accessToken;
+  static isLoggedIn({ accessToken }: UserStateModel): boolean {
+    return !!accessToken;
   }
 
   @Selector()
@@ -45,11 +45,21 @@ export class UserState {
     return user;
   }
 
+  @Selector()
+  static isLoading({ isLoading }: UserStateModel): boolean {
+    return isLoading;
+  }
+
+  @Selector()
+  static error({ error }: UserStateModel): string | null {
+    return error;
+  }
+
   @Action(UserActions.SignIn)
   async signIn(
     { getState, patchState }: StateContext<UserStateModel>,
     { payload }: UserActions.SignIn,
-  ): Promise<boolean> {
+  ): Promise<void> {
     const state = getState();
     patchState({ ...state, isLoading: true });
     console.log(payload);
@@ -71,12 +81,17 @@ export class UserState {
           .toPromise()
       ).data() as User;
 
-      patchState({ user: userData, accessToken: token, isLoading: false });
-      return true;
-    } catch (error) {
-      console.log(error);
-      patchState({ ...state, error: error.message });
-      return false;
+      patchState({
+        user: userData,
+        accessToken: token,
+        isLoading: false,
+        error: null,
+      });
+    } catch ({ message }) {
+      patchState({
+        ...state,
+        error: message,
+      });
     }
   }
 
@@ -103,6 +118,8 @@ export class UserState {
           name,
           lastname,
         });
+
+      patchState({ ...state, isLoading: false, error: null });
     } catch (error) {
       console.log(error);
       patchState({ ...state, isLoading: false, error: error.message });

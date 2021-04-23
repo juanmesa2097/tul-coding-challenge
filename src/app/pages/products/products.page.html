@@ -17,7 +17,10 @@
     size="xxl"
     [showLoader]="(isLoading$ | async) || false"
   >
-    <app-products-list [products]="products$ | async"></app-products-list>
+    <app-products-list
+      [products]="products$ | async"
+      (addToCart)="onAddToCart($event)"
+    ></app-products-list>
   </tui-loader>
   <!-- /list -->
 </div>

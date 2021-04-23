@@ -1,21 +1,26 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FirestoreCollection } from '@app/@core/structs/firestore-collection.enum';
+import { deepClone } from '@app/@core/utils';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { Observable } from 'rxjs';
+import { mergeMap, tap } from 'rxjs/operators';
 import { StateName } from '../state-name.enum';
 import { CartActions } from './cart.actions';
-import { CartProduct } from './cart.model';
+import { Cart } from './cart.model';
 
 interface CartStateModel {
-  cartProducts: CartProduct[];
+  cart: Cart | null;
   isLoading: boolean;
+  error: string | null;
 }
 
 @State<CartStateModel>({
   name: StateName.Cart,
   defaults: {
-    cartProducts: [],
+    cart: null,
     isLoading: false,
+    error: null,
   },
 })
 @Injectable()
@@ -23,50 +28,70 @@ export class CartState {
   constructor(private firestore: AngularFirestore) {}
 
   @Selector()
-  static fetchCartProducts(state: CartStateModel): CartProduct[] {
-    return state.cartProducts;
+  static fetchCart({ cart }: CartStateModel): Cart | null {
+    return cart;
   }
 
   @Selector()
-  static isLoading(state: CartStateModel): boolean {
-    return state.isLoading;
+  static isLoading({ isLoading }: CartStateModel): boolean {
+    return isLoading;
   }
 
   @Action(CartActions.Fetch)
-  async fetch({
-    getState,
-    patchState,
-  }: StateContext<CartStateModel>): Promise<void> {
+  fetch(
+    { getState, patchState }: StateContext<CartStateModel>,
+    { payload }: CartActions.Fetch,
+  ): Observable<Cart> {
     const state = getState();
     patchState({ ...state, isLoading: true });
 
-    const s = await this.firestore
-      .collection<CartProduct>(FirestoreCollection.CartProducts)
-      .snapshotChanges()
-      .toPromise();
+    const userRef = this.firestore
+      .collection(FirestoreCollection.Users)
+      .doc(payload).ref;
 
-    console.log('xxxxxxxxxxxxxxxxxx', s);
+    return this.firestore
+      .collection<Cart>(FirestoreCollection.Cart, (ref) =>
+        ref.where('userId', '==', userRef).limit(1),
+      )
+      .valueChanges()
+      .pipe(
+        mergeMap((carts) => carts),
+        tap((cart) => {
+          console.log(cart);
+          patchState({
+            ...state,
+            cart: deepClone<Cart>(cart),
+            isLoading: false,
+          });
+        }),
+      );
+    // patchState({ ...state, cart: s, isLoading: false });
   }
 
   @Action(CartActions.Add)
-  add(
+  async add(
     { getState, patchState }: StateContext<CartStateModel>,
     { payload }: CartActions.Add,
-  ): void {
+  ): Promise<void> {
     const state = getState();
-    patchState({ cartProducts: [...state.cartProducts, payload] });
-  }
+    patchState({ ...state, isLoading: true });
 
-  @Action(CartActions.Remove)
-  remove(
-    { getState, patchState }: StateContext<CartStateModel>,
-    { payload }: CartActions.Remove,
-  ): void {
-    const state = getState();
-    patchState({
-      cartProducts: state.cartProducts.filter(
-        (product) => product.id !== payload,
-      ),
-    });
+    try {
+      await this.firestore.collection(FirestoreCollection.Cart).add({
+        ...payload,
+        userId: this.firestore
+          .collection(FirestoreCollection.Users)
+          .doc(payload.userId).ref,
+      });
+
+      patchState({ ...state, cart: payload, isLoading: false, error: null });
+    } catch (error) {
+      patchState({
+        ...state,
+        cart: null,
+        isLoading: false,
+        error: error.message,
+      });
+    }
   }
 }

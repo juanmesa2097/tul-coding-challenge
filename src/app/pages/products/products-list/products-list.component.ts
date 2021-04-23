@@ -1,8 +1,10 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  EventEmitter,
   Input,
   OnInit,
+  Output,
 } from '@angular/core';
 import { Product } from '@app/store/products/products.model';
 
@@ -15,7 +17,13 @@ import { Product } from '@app/store/products/products.model';
 export class ProductsListComponent implements OnInit {
   @Input() products!: Product[] | null;
 
+  @Output() addToCart = new EventEmitter<Product>();
+
   constructor() {}
 
   ngOnInit(): void {}
+
+  onClickAddToCart(product: Product): void {
+    this.addToCart.emit(product);
+  }
 }

@@ -40,7 +40,6 @@ export class SignUpPage implements OnInit, OnDestroy {
       .dispatch(new UserActions.SignUp(user))
       .pipe(takeUntil(this.destroy$))
       .subscribe(({ user }) => {
-        console.log(user);
         if (user.error === null) {
           this.showSuccessMessage();
           setTimeout(() => this.router.navigate(['/', Path.SignIn]), 2000);

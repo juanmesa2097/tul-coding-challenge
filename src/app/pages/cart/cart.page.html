@@ -18,7 +18,10 @@
   >
     <ng-container *ngIf="products.length; else noCartItems">
       <!-- cart block -->
-      <app-cart-items [products]="products"></app-cart-items>
+      <app-cart-items
+        [products]="products"
+        (delete)="onDelete($event)"
+      ></app-cart-items>
 
       <app-cart-summary
         [shippingCost]="(shippingCost$ | async) || 0"

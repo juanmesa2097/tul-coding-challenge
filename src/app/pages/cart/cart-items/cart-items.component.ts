@@ -1,8 +1,10 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  EventEmitter,
   Input,
   OnInit,
+  Output,
 } from '@angular/core';
 import { Product } from '@app/store/products/products.model';
 
@@ -15,7 +17,17 @@ import { Product } from '@app/store/products/products.model';
 export class CartItemsComponent implements OnInit {
   @Input() products!: Product[];
 
+  @Output() delete = new EventEmitter<string>();
+
   constructor() {}
 
   ngOnInit(): void {}
+
+  trackByProductId(index: number, product: Product): string {
+    return product.id;
+  }
+
+  onClickDelete(productId: string): void {
+    this.delete.emit(productId);
+  }
 }

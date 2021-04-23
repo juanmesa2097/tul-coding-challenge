@@ -1,5 +1,8 @@
 <ul class="space-y-4">
-  <li *ngFor="let product of products" class="p-4 border-b border-gray-400">
+  <li
+    *ngFor="let product of products; trackBy: trackByProductId"
+    class="p-4 border-b border-gray-400"
+  >
     <div class="flex items-center justify-between mb-6">
       <!-- left -->
       <div class="flex items-center">
@@ -33,7 +36,13 @@
     </div>
 
     <div class="flex justify-end items center">
-      <button tuiButton appearance="danger" class="outline-none" size="s">
+      <button
+        tuiButton
+        appearance="danger"
+        class="outline-none"
+        size="s"
+        (click)="onClickDelete(product.id)"
+      >
         Eliminar
       </button>
     </div>

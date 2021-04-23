@@ -28,7 +28,6 @@ export class ProductsPage implements OnInit {
 
   ngOnInit(): void {
     const user = this.store.selectSnapshot(UserState.user);
-    console.log(user);
 
     this.store.dispatch(new ProductsActions.Fetch());
 
@@ -41,6 +40,7 @@ export class ProductsPage implements OnInit {
     const userId = this.store.selectSnapshot(UserState.user)?.id;
     const cartId = this.store.selectSnapshot(CartState.fetchCart)?.id;
 
+    console.log(userId, cartId);
     if (cartId) {
       this.addCartProduct(cartId, product.id);
     } else if (userId && !cartId) {
@@ -52,7 +52,6 @@ export class ProductsPage implements OnInit {
       this.addCart(newCart)
         .pipe(
           mergeMap(({ cart }) => {
-            console.log(cart);
             return this.addCartProduct(cart.cart.id, product.id);
           }),
         )

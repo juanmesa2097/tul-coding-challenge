@@ -62,7 +62,6 @@ export class UserState {
   ): Promise<void> {
     const state = getState();
     patchState({ ...state, isLoading: true });
-    console.log(payload);
     try {
       // Signs in and gets token id
       const { user } = await this.fireAuth.signInWithEmailAndPassword(
@@ -121,7 +120,6 @@ export class UserState {
 
       patchState({ ...state, isLoading: false, error: null });
     } catch (error) {
-      console.log(error);
       patchState({ ...state, isLoading: false, error: error.message });
     }
   }

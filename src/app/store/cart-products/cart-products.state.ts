@@ -3,14 +3,17 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { FirestoreCollection } from '@app/@core/structs/firestore-collection.enum';
 import { deepClone } from '@app/@core/utils';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { Product } from '../products/products.model';
 import { StateName } from '../state-name.enum';
 import { CartProductsActions } from './cart-products.actions';
 import { CartProduct } from './cart-products.model';
 
 interface CartProductsStateModel {
   cartProducts: CartProduct[];
+  productsInCart: Product[];
+  shipping: number;
   isLoading: boolean;
   error: string | null;
 }
@@ -19,6 +22,8 @@ interface CartProductsStateModel {
   name: StateName.CartProducts,
   defaults: {
     cartProducts: [],
+    productsInCart: [],
+    shipping: 10000,
     isLoading: false,
     error: null,
   },
@@ -35,6 +40,13 @@ export class CartProductsState {
   }
 
   @Selector()
+  static fetchProductsInCart({
+    productsInCart,
+  }: CartProductsStateModel): Product[] {
+    return productsInCart;
+  }
+
+  @Selector()
   static isLoading({ isLoading }: CartProductsStateModel): boolean {
     return isLoading;
   }
@@ -42,6 +54,29 @@ export class CartProductsState {
   @Selector()
   static cartProductsCount({ cartProducts }: CartProductsStateModel): number {
     return cartProducts.length;
+  }
+
+  @Selector()
+  static getShippingCost({ shipping }: CartProductsStateModel): number {
+    return shipping;
+  }
+
+  @Selector()
+  static getSubTotal({ productsInCart }: CartProductsStateModel): number {
+    return productsInCart.reduce((acum, product) => acum + product.price, 0);
+  }
+
+  @Selector()
+  static getGrandTotal({
+    productsInCart,
+    shipping,
+  }: CartProductsStateModel): number {
+    const price = productsInCart.reduce(
+      (acum, product) => acum + product.price,
+      0,
+    );
+
+    return price + shipping;
   }
 
   @Action(CartProductsActions.Fetch)
@@ -52,13 +87,9 @@ export class CartProductsState {
     const state = getState();
     patchState({ ...state, isLoading: true });
 
-    const cartRef = this.firestore
-      .collection(FirestoreCollection.Cart)
-      .doc(payload).ref;
-
     return this.firestore
       .collection<CartProduct>(FirestoreCollection.CartProducts, (ref) =>
-        ref.where('cartId', '==', cartRef),
+        ref.where('cartId', '==', payload),
       )
       .valueChanges()
       .pipe(
@@ -72,37 +103,61 @@ export class CartProductsState {
       );
   }
 
+  @Action(CartProductsActions.FetchByIds)
+  fetchByIds(
+    { getState, patchState }: StateContext<CartProductsStateModel>,
+    { payload }: CartProductsActions.FetchByIds,
+  ): Observable<Product[]> {
+    const state = getState();
+    console.log(payload);
+    const fetchedProducts = payload.map((id) =>
+      this.firestore
+        .collection<Product>(FirestoreCollection.Products, (ref) =>
+          ref.where('id', '==', id),
+        )
+        .doc(id)
+        .valueChanges(),
+    );
+
+    return combineLatest<Product[]>(fetchedProducts).pipe(
+      tap((products) => {
+        patchState({
+          ...state,
+          productsInCart: deepClone<Product[]>(products),
+        });
+      }),
+    );
+  }
+
   @Action(CartProductsActions.Add)
-  async add(
+  add(
     { getState, patchState }: StateContext<CartProductsStateModel>,
     { payload }: CartProductsActions.Add,
-  ): Promise<void> {
+  ): void {
     const state = getState();
     patchState({ ...state, isLoading: true });
 
-    try {
-      await this.firestore.collection(FirestoreCollection.CartProducts).add({
-        ...payload,
-        cartId: this.firestore
-          .collection(FirestoreCollection.Cart)
-          .doc(payload.cartId).ref,
-        productId: payload.productId.trim(),
-      });
+    const { cartId, productId } = payload;
 
-      patchState({
-        ...state,
-        cartProducts: [...state.cartProducts, payload],
-        isLoading: false,
-        error: null,
+    this.firestore
+      .collection(FirestoreCollection.CartProducts)
+      .doc(`${cartId}_${productId}`)
+      .set({
+        ...payload,
+        cartId,
+        productId,
+      })
+      .then(() => {
+        patchState({
+          ...state,
+          cartProducts: deepClone<CartProduct[]>([
+            ...state.cartProducts,
+            payload,
+          ]),
+          isLoading: false,
+          error: null,
+        });
       });
-    } catch (error) {
-      patchState({
-        ...state,
-        cartProducts: [],
-        isLoading: false,
-        error: error.message,
-      });
-    }
   }
 
   @Action(CartProductsActions.Remove)
@@ -111,10 +166,24 @@ export class CartProductsState {
     { payload }: CartProductsActions.Remove,
   ): void {
     const state = getState();
+
     patchState({
-      cartProducts: state.cartProducts.filter(
-        (product) => product.id !== payload,
-      ),
+      ...state,
+      isLoading: true,
     });
+
+    const productQuery = this.firestore.collection(
+      FirestoreCollection.CartProducts,
+      (ref) => ref.where('productId', '==', payload.trim()),
+    );
+
+    productQuery
+      .get()
+      .toPromise()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          doc.ref.delete();
+        });
+      });
   }
 }

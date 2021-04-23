@@ -42,6 +42,18 @@ export class UserDropdownComponent implements OnInit {
     this.open = !this.open;
   }
 
+  onObscured(obscured: any): void {
+    if (obscured) {
+      this.open = false;
+    }
+  }
+
+  onActiveZone(active: any): void {
+    if (!active) {
+      this.open = false;
+    }
+  }
+
   onClickSignOut(): void {
     this.router.navigate(['/', Path.SignOut]);
   }

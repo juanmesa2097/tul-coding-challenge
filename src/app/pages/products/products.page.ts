@@ -10,7 +10,7 @@ import { ProductsState } from '@app/store/products/products.state';
 import { UserState } from '@app/store/user/users.state';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
+import { finalize, mergeMap } from 'rxjs/operators';
 
 @Component({
   templateUrl: './products.page.html',
@@ -18,7 +18,8 @@ import { mergeMap } from 'rxjs/operators';
 })
 export class ProductsPage implements OnInit {
   @Select(ProductsState.fetchProductsList) products$!: Observable<Product[]>;
-  @Select(ProductsState.isLoading) isLoading$!: Observable<boolean>;
+  @Select(ProductsState.isLoading) fetchLoading$!: Observable<boolean>;
+  addLoading = false;
 
   breadcrumbs = [];
 
@@ -37,12 +38,14 @@ export class ProductsPage implements OnInit {
   }
 
   onAddToCart(product: Product): void {
+    this.addLoading = true;
     const userId = this.store.selectSnapshot(UserState.user)?.id;
     const cartId = this.store.selectSnapshot(CartState.fetchCart)?.id;
 
     console.log(userId, cartId);
     if (cartId) {
       this.addCartProduct(cartId, product.id);
+      this.addLoading = false;
     } else if (userId && !cartId) {
       const newCart: Cart = {
         status: 'Pending',
@@ -54,6 +57,7 @@ export class ProductsPage implements OnInit {
           mergeMap(({ cart }) => {
             return this.addCartProduct(cart.cart.id, product.id);
           }),
+          finalize(() => (this.addLoading = false)),
         )
         .subscribe();
     }

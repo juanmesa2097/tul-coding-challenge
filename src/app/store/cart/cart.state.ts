@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, QuerySnapshot } from '@angular/fire/firestore';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { FirestoreCollection } from '@app/@core/structs/firestore-collection.enum';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 import { StateName } from '../state-name.enum';
 import { CartActions } from './cart.actions';
 import { CartProduct } from './cart.model';
@@ -35,18 +33,19 @@ export class CartState {
   }
 
   @Action(CartActions.Fetch)
-  fetch({
+  async fetch({
     getState,
     patchState,
-  }: StateContext<CartStateModel>): Observable<CartProduct[]> {
-    patchState({ ...getState(), isLoading: true });
+  }: StateContext<CartStateModel>): Promise<void> {
+    const state = getState();
+    patchState({ ...state, isLoading: true });
 
-    return this.firestore
-      .collection<QuerySnapshot<CartProduct[]>>(
-        FirestoreCollection.CartProducts,
-      )
-      .valueChanges()
-      .pipe(tap(console.log));
+    const s = await this.firestore
+      .collection<CartProduct>(FirestoreCollection.CartProducts)
+      .snapshotChanges()
+      .toPromise();
+
+    console.log('xxxxxxxxxxxxxxxxxx', s);
   }
 
   @Action(CartActions.Add)

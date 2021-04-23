@@ -11,17 +11,20 @@
 <div class="container my-16">
   <!-- list -->
   <tui-loader
-    *ngIf="cartProducts$ | async as cartProducts"
+    *ngIf="products$ | async as products"
     [overlay]="true"
     size="xxl"
     [showLoader]="(isLoading$ | async) || false"
   >
-    <!-- cart products -->
+    <!-- cart block -->
     <app-cart-items
-      *ngIf="cartProducts.length; else noCartItems"
-      [cartProducts]="cartProducts"
+      *ngIf="products.length; else noCartItems"
+      [cartProducts]="products"
     ></app-cart-items>
-    <!-- cart products -->
+
+    <app-cart-summary></app-cart-summary>
+
+    <!-- cart block -->
 
     <!-- empty cart -->
     <ng-template #noCartItems>

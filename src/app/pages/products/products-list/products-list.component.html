@@ -9,7 +9,9 @@
     <p class="h-12 line-clamp-2">
       {{ product.description }}
     </p>
-
+    <span class="block mt-4 text-2xl text-gray-600">
+      {{ product.price | currency }}
+    </span>
     <button
       tuiButton
       type="button"

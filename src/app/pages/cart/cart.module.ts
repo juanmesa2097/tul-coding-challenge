@@ -5,10 +5,11 @@ import { Path } from '@app/@core/structs';
 import { TuiButtonModule, TuiLoaderModule } from '@taiga-ui/core';
 import { TuiBreadcrumbsModule } from '@taiga-ui/kit';
 import { CartItemsComponent } from './cart-items/cart-items.component';
+import { CartSummaryComponent } from './cart-summary/cart-summary.component';
 import { CartPage } from './cart.page';
 
 @NgModule({
-  declarations: [CartPage, CartItemsComponent],
+  declarations: [CartPage, CartItemsComponent, CartSummaryComponent],
   imports: [
     CommonModule,
     RouterModule.forChild([

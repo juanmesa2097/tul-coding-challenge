@@ -1,0 +1,25 @@
+<div class="flex flex-col items-end py-12 mb-12 border-gray-400">
+  <div class="flex justify-between mb-4 text-base w-96">
+    <span class="block w-1/2"> Subtotal </span>
+    <span class="w-1/2 ml-12 font-bold text-right">
+      {{ '100000' | currency }}
+    </span>
+  </div>
+  <div
+    class="flex justify-between pb-4 mb-4 text-base border-b border-gray-400 w-96"
+  >
+    <span class="block w-1/2"> Envío </span>
+    <span class="w-1/2 ml-12 font-bold text-right">
+      {{ '10000' | currency }}
+    </span>
+  </div>
+  <div class="flex justify-between pb-4 mb-4 text-base w-96">
+    <span class="block w-1/2"> Total (iva incluído) </span>
+    <span class="w-1/2 ml-12 font-bold text-right">
+      {{ '110000' | currency }}
+    </span>
+  </div>
+  <button tuiButton appearance="primary" class="outline-none">
+    Continuar con la compra
+  </button>
+</div>

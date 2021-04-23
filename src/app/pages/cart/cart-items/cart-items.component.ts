@@ -4,7 +4,7 @@ import {
   Input,
   OnInit,
 } from '@angular/core';
-import { CartProduct } from '@app/store/cart/cart.model';
+import { Product } from '@app/store/products/products.model';
 
 @Component({
   selector: 'app-cart-items',
@@ -13,7 +13,7 @@ import { CartProduct } from '@app/store/cart/cart.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CartItemsComponent implements OnInit {
-  @Input() cartProducts!: CartProduct[];
+  @Input() cartProducts!: Product[];
 
   constructor() {}
 

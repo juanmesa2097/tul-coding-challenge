@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Path } from '@app/@core/structs';
+import { CartActions } from '@app/store/cart/cart.actions';
 import { CartProduct } from '@app/store/cart/cart.model';
 import { CartState } from '@app/store/cart/cart.state';
+import { ProductsActions } from '@app/store/products/products.actions';
+import { Product } from '@app/store/products/products.model';
+import { ProductsState } from '@app/store/products/products.state';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 
@@ -11,10 +15,11 @@ import { Observable } from 'rxjs';
   styleUrls: ['./cart.page.scss'],
 })
 export class CartPage implements OnInit {
+  @Select(ProductsState.fetchProductsList) products$!: Observable<Product[]>;
   @Select(CartState.fetchCartProducts) cartProducts$!: Observable<
     CartProduct[]
   >;
-  @Select(CartState.isLoading) isLoading$!: Observable<boolean>;
+  @Select(ProductsState.isLoading) isLoading$!: Observable<boolean>;
 
   breadcrumbs = [];
 
@@ -25,6 +30,7 @@ export class CartPage implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.store.dispatch(new CartActions.Fetch());
+    this.store.dispatch(new CartActions.Fetch());
+    this.store.dispatch(new ProductsActions.Fetch());
   }
 }

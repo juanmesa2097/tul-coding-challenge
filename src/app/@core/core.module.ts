@@ -30,7 +30,7 @@ import { maxLengthValidator, minLengthValidator } from './utils';
       key: [
         `${StateName.User}.user`,
         `${StateName.User}.accessToken`,
-        StateName.Cart,
+        // StateName.Cart,
       ],
     }),
     NgxsReduxDevtoolsPluginModule.forRoot({

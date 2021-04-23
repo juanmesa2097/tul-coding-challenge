@@ -15,7 +15,7 @@ import { ProductsPage } from './products.page';
         path: '',
         component: ProductsPage,
         data: {
-          title: 'List of products',
+          title: 'Lista de productos',
           robots: 'noindex, nofollow',
           breadcrumbs: [],
         },

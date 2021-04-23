@@ -89,7 +89,7 @@ export class ProductsState {
     { payload }: ProductsActions.FetchByIds,
   ): Observable<Product[]> {
     const state = getState();
-    patchState({ ...state, isLoading: false });
+    patchState({ ...state, isLoading: true });
 
     const fetchedProducts = payload.map((id) =>
       this.firestore

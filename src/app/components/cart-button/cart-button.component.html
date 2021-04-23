@@ -2,7 +2,7 @@
   class="tui-space_right-5"
   colorTop="var(--tui-error-fill)"
   size="l"
-  [contentTop]="0"
+  [contentTop]="(productsCount$ | async) || 0"
 >
   <button
     tuiButton

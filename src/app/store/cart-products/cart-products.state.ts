@@ -1,66 +1,116 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FirestoreCollection } from '@app/@core/structs/firestore-collection.enum';
+import { deepClone } from '@app/@core/utils';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { StateName } from '../state-name.enum';
-import { CartActions } from './cart-products.actions';
+import { CartProductsActions } from './cart-products.actions';
 import { CartProduct } from './cart-products.model';
 
-interface CartStateModel {
+interface CartProductsStateModel {
   cartProducts: CartProduct[];
   isLoading: boolean;
+  error: string | null;
 }
 
-@State<CartStateModel>({
-  name: StateName.Cart,
+@State<CartProductsStateModel>({
+  name: StateName.CartProducts,
   defaults: {
     cartProducts: [],
     isLoading: false,
+    error: null,
   },
 })
 @Injectable()
-export class CartState {
+export class CartProductsState {
   constructor(private firestore: AngularFirestore) {}
 
   @Selector()
-  static fetchCartProducts(state: CartStateModel): CartProduct[] {
-    return state.cartProducts;
+  static fetchCartProducts({
+    cartProducts,
+  }: CartProductsStateModel): CartProduct[] {
+    return cartProducts;
   }
 
   @Selector()
-  static isLoading(state: CartStateModel): boolean {
-    return state.isLoading;
+  static isLoading({ isLoading }: CartProductsStateModel): boolean {
+    return isLoading;
   }
 
-  @Action(CartActions.Fetch)
-  async fetch({
-    getState,
-    patchState,
-  }: StateContext<CartStateModel>): Promise<void> {
+  @Selector()
+  static cartProductsCount({ cartProducts }: CartProductsStateModel): number {
+    return cartProducts.length;
+  }
+
+  @Action(CartProductsActions.Fetch)
+  fetch(
+    { getState, patchState }: StateContext<CartProductsStateModel>,
+    { payload }: CartProductsActions.Fetch,
+  ): Observable<CartProduct[]> {
     const state = getState();
     patchState({ ...state, isLoading: true });
 
-    const s = await this.firestore
-      .collection<CartProduct>(FirestoreCollection.CartProducts)
-      .snapshotChanges()
-      .toPromise();
+    const cartRef = this.firestore
+      .collection(FirestoreCollection.Cart)
+      .doc(payload).ref;
 
-    console.log('xxxxxxxxxxxxxxxxxx', s);
+    return this.firestore
+      .collection<CartProduct>(FirestoreCollection.CartProducts, (ref) =>
+        ref.where('cartId', '==', cartRef),
+      )
+      .valueChanges()
+      .pipe(
+        tap((products) => {
+          patchState({
+            ...state,
+            cartProducts: deepClone<CartProduct[]>(products),
+            isLoading: false,
+          });
+        }),
+      );
   }
 
-  @Action(CartActions.Add)
-  add(
-    { getState, patchState }: StateContext<CartStateModel>,
-    { payload }: CartActions.Add,
-  ): void {
+  @Action(CartProductsActions.Add)
+  async add(
+    { getState, patchState }: StateContext<CartProductsStateModel>,
+    { payload }: CartProductsActions.Add,
+  ): Promise<void> {
     const state = getState();
-    patchState({ cartProducts: [...state.cartProducts, payload] });
+    patchState({ ...state, isLoading: true });
+    console.log(payload);
+    try {
+      await this.firestore.collection(FirestoreCollection.CartProducts).add({
+        ...payload,
+        cartId: this.firestore
+          .collection(FirestoreCollection.Cart)
+          .doc(payload.cartId).ref,
+        productId: this.firestore
+          .collection(FirestoreCollection.Products)
+          .doc(payload.productId).ref,
+      });
+
+      patchState({
+        ...state,
+        cartProducts: [...state.cartProducts, payload],
+        isLoading: false,
+        error: null,
+      });
+    } catch (error) {
+      patchState({
+        ...state,
+        cartProducts: [],
+        isLoading: false,
+        error: error.message,
+      });
+    }
   }
 
-  @Action(CartActions.Remove)
+  @Action(CartProductsActions.Remove)
   remove(
-    { getState, patchState }: StateContext<CartStateModel>,
-    { payload }: CartActions.Remove,
+    { getState, patchState }: StateContext<CartProductsStateModel>,
+    { payload }: CartProductsActions.Remove,
   ): void {
     const state = getState();
     patchState({

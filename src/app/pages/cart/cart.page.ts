@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Path } from '@app/@core/structs';
-import { CartActions } from '@app/store/cart/cart.actions';
 import { ProductsActions } from '@app/store/products/products.actions';
 import { Product } from '@app/store/products/products.model';
 import { ProductsState } from '@app/store/products/products.state';
@@ -32,7 +31,7 @@ export class CartPage implements OnInit {
     const userId = this.store.selectSnapshot(UserState.user)?.id;
 
     if (userId) {
-      this.store.dispatch(new CartActions.Fetch(userId));
+      // this.store.dispatch(new cartprod.Fetch(userId));
       this.store.dispatch(new ProductsActions.Fetch());
     }
   }

@@ -1,6 +1,6 @@
 <tui-root>
   <!-- logged in -->
-  <app-layout *ngIf="isLoggedIn$ | async; else notAuthorized">
+  <app-layout *ngIf="isLoggedIn; else notAuthorized">
     <router-outlet></router-outlet>
   </app-layout>
   <!-- /logged in -->

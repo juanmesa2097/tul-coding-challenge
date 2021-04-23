@@ -37,6 +37,11 @@ export class CartState {
     return isLoading;
   }
 
+  @Selector()
+  static cartId({ cart }: CartStateModel): string | null {
+    return cart?.id ? cart.id : null;
+  }
+
   @Action(CartActions.Fetch)
   fetch(
     { getState, patchState }: StateContext<CartStateModel>,
@@ -57,7 +62,6 @@ export class CartState {
       .pipe(
         mergeMap((carts) => carts),
         tap((cart) => {
-          console.log(cart);
           patchState({
             ...state,
             cart: deepClone<Cart>(cart),
@@ -65,7 +69,6 @@ export class CartState {
           });
         }),
       );
-    // patchState({ ...state, cart: s, isLoading: false });
   }
 
   @Action(CartActions.Add)
@@ -77,14 +80,25 @@ export class CartState {
     patchState({ ...state, isLoading: true });
 
     try {
-      await this.firestore.collection(FirestoreCollection.Cart).add({
-        ...payload,
-        userId: this.firestore
-          .collection(FirestoreCollection.Users)
-          .doc(payload.userId).ref,
-      });
+      const cartId = this.firestore.createId();
 
-      patchState({ ...state, cart: payload, isLoading: false, error: null });
+      await this.firestore
+        .collection(FirestoreCollection.Cart)
+        .doc(cartId)
+        .set({
+          ...payload,
+          id: cartId,
+          userId: this.firestore
+            .collection(FirestoreCollection.Users)
+            .doc(payload.userId).ref,
+        });
+
+      patchState({
+        ...state,
+        cart: { ...payload, id: cartId },
+        isLoading: false,
+        error: null,
+      });
     } catch (error) {
       patchState({
         ...state,

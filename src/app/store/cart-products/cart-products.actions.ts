@@ -1,15 +1,15 @@
 import { CartProduct } from './cart-products.model';
 
-export namespace CartActions {
+export namespace CartProductsActions {
   enum ActionType {
-    Fetch = '[Cart] Fetch',
-    Add = '[Cart] Add',
-    Remove = '[Cart] Remove',
+    Fetch = '[CartProducts] Fetch',
+    Add = '[CartProducts] Add',
+    Remove = '[CartProducts] Remove',
   }
 
   export class Fetch {
     static readonly type = ActionType.Fetch;
-    constructor() {}
+    constructor(public payload: string) {}
   }
 
   export class Add {

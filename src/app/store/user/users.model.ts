@@ -2,6 +2,11 @@ export interface User {
   id?: string;
   email: string;
   password: string;
-  firstName: string;
-  lastName: string;
+  name: string;
+  lastname: string;
+}
+
+export interface LoginCredentials {
+  email: string;
+  password: string;
 }

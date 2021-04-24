@@ -10,7 +10,10 @@ import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { NgxsModule } from '@ngxs/store';
+import { iconsPathFactory, TUI_ICONS_PATH } from '@taiga-ui/core';
+import { TUI_VALIDATION_ERRORS } from '@taiga-ui/kit';
 import { JwtInterceptor, ServerErrorInterceptor } from './interceptors';
+import { maxLengthValidator, minLengthValidator } from './utils';
 
 @NgModule({
   declarations: [],
@@ -24,7 +27,11 @@ import { JwtInterceptor, ServerErrorInterceptor } from './interceptors';
       developmentMode: !environment.production,
     }),
     NgxsStoragePluginModule.forRoot({
-      key: [StateName.User, StateName.Cart],
+      key: [
+        `${StateName.User}.user`,
+        `${StateName.User}.accessToken`,
+        `${StateName.Cart}.cart.id`,
+      ],
     }),
     NgxsReduxDevtoolsPluginModule.forRoot({
       disabled: environment.production,
@@ -41,6 +48,19 @@ import { JwtInterceptor, ServerErrorInterceptor } from './interceptors';
       multi: true,
     },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    {
+      provide: TUI_ICONS_PATH,
+      useValue: iconsPathFactory('assets/taiga-ui/icons/'),
+    },
+    {
+      provide: TUI_VALIDATION_ERRORS,
+      useValue: {
+        required: 'Campo requerido',
+        email: 'Email incorrecto',
+        minlength: minLengthValidator,
+        maxLength: maxLengthValidator,
+      },
+    },
   ],
 })
 export class CoreModule {}

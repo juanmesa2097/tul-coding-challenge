@@ -1,23 +1,44 @@
 import { Component, OnInit } from '@angular/core';
-import { CartActions } from '@app/store/cart/cart.actions';
-import { CartProduct } from '@app/store/cart/cart.model';
-import { CartState } from '@app/store/cart/cart.state';
+import { ActivatedRoute } from '@angular/router';
+import { Path } from '@app/@core/structs';
+import { CartProductsActions } from '@app/store/cart-products/cart-products.actions';
+import { CartProductsState } from '@app/store/cart-products/cart-products.state';
+import { Product } from '@app/store/products/products.model';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   templateUrl: './cart.page.html',
   styleUrls: ['./cart.page.scss'],
 })
 export class CartPage implements OnInit {
-  @Select(CartState.fetchCartProducts) cartProducts$!: Observable<
-    CartProduct[]
+  @Select(CartProductsState.fetchProductsInCart) products$!: Observable<
+    Product[]
   >;
-  @Select(CartState.isLoading) isLoading!: Observable<boolean>;
+  @Select(CartProductsState.isLoading) isLoading$!: Observable<boolean>;
+  @Select(CartProductsState.getShippingCost) shippingCost$!: Observable<number>;
+  @Select(CartProductsState.getSubTotal) subTotal$!: Observable<number>;
+  @Select(CartProductsState.getGrandTotal) grandTotal$!: Observable<number>;
 
-  constructor(private store: Store) {}
+  breadcrumbs = [];
+
+  path = Path;
+
+  constructor(private activatedRoute: ActivatedRoute, private store: Store) {
+    this.breadcrumbs = this.activatedRoute.snapshot.data.breadcrumbs;
+  }
 
   ngOnInit(): void {
-    this.store.dispatch(new CartActions.Fetch());
+    this.store
+      .select(CartProductsState.fetchCartProducts)
+      .pipe(map((cartProducts) => cartProducts.map((p) => p.productId)))
+      .subscribe((productsIds) => {
+        this.store.dispatch(new CartProductsActions.FetchByIds(productsIds));
+      });
+  }
+
+  onDelete(productId: string): void {
+    this.store.dispatch(new CartProductsActions.Remove(productId));
   }
 }

@@ -1,2 +1,69 @@
-cart products
-<div *ngFor="let product of cartProducts$ | async">{{product.quantity}}</div>
+<!-- page header -->
+<div class="w-full h-52 bg-gradient-to-br from-green-300 to-yellow-200">
+  <div class="container flex flex-col mb-16">
+    <h1 class="mb-0 text-6xl text-white">El carrito</h1>
+    <tui-breadcrumbs [items]="breadcrumbs"></tui-breadcrumbs>
+  </div>
+</div>
+<!-- /page header -->
+
+<!-- container -->
+<div class="container my-16">
+  <!-- list -->
+  <tui-loader
+    *ngIf="products$ | async as products"
+    [overlay]="true"
+    size="xxl"
+    [showLoader]="(isLoading$ | async) || false"
+  >
+    <ng-container *ngIf="products.length; else noCartItems">
+      <!-- cart block -->
+      <app-cart-items
+        [products]="products"
+        (delete)="onDelete($event)"
+      ></app-cart-items>
+
+      <app-cart-summary
+        [shippingCost]="(shippingCost$ | async) || 0"
+        [subTotal]="(subTotal$ | async) || 0"
+        [grandTotal]="(grandTotal$ | async) || 0"
+      ></app-cart-summary>
+    </ng-container>
+
+    <!-- cart block -->
+
+    <!-- empty cart -->
+    <ng-template #noCartItems>
+      <div
+        *ngIf="(isLoading$ | async) === false"
+        class="flex flex-col items-center max-w-lg mx-auto text-center"
+      >
+        <img
+          src="../../../assets/empty_cart.svg"
+          alt="Empty cart, products haven't been added"
+          class="w-48 h-48"
+        />
+
+        <h3 class="mb-4 h2">El carrito está vacío.</h3>
+
+        <p class="mb-8 text-lg">
+          Puede agregar algunos elementos desde la página de productos.
+        </p>
+
+        <!-- button -->
+        <a
+          tuiButton
+          appearance="primary"
+          class="outline-none"
+          [routerLink]="['/', path.Products]"
+        >
+          Ver productos
+        </a>
+        <!-- /button -->
+      </div>
+    </ng-template>
+    <!-- /empty cart -->
+  </tui-loader>
+  <!-- /list -->
+</div>
+<!-- /container -->

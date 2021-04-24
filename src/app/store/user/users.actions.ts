@@ -1,4 +1,4 @@
-import { User } from './users.model';
+import { LoginCredentials, User } from './users.model';
 
 export namespace UserActions {
   enum ActionType {
@@ -9,7 +9,7 @@ export namespace UserActions {
 
   export class SignIn {
     static readonly type = ActionType.SignIn;
-    constructor(public email: string, public password: string) {}
+    constructor(public payload: LoginCredentials) {}
   }
 
   export class SignUp {

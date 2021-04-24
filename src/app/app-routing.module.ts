@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { Path } from '@core/structs';
 import { NotFoundModule } from '@pages/_not-found/not-found.module';
+import { AuthGuard, NoAuthGuard } from './@core/guards';
 
 const routes: Routes = [
   { path: '', redirectTo: Path.Products, pathMatch: 'full' },
@@ -9,7 +10,7 @@ const routes: Routes = [
   // Auth
   {
     path: Path.Auth,
-    // canActivate: [NoAuthGuard],
+    canActivate: [NoAuthGuard],
     children: [
       {
         path: Path.SignIn,
@@ -25,25 +26,33 @@ const routes: Routes = [
             (m) => m.SignUpModule,
           ),
       },
-      {
-        path: Path.SignOut,
-        loadChildren: () =>
-          import('@pages/+auth/sign-out/sign-out.module').then(
-            (m) => m.SignOutModule,
-          ),
-      },
     ],
+  },
+  {
+    path: Path.SignOut,
+    loadChildren: () =>
+      import('@pages/+auth/sign-out/sign-out.module').then(
+        (m) => m.SignOutModule,
+      ),
   },
   // App
   {
-    path: Path.Products,
-    loadChildren: () =>
-      import('@pages/products/products.module').then((m) => m.ProductsModule),
-  },
-  {
-    path: Path.Cart,
-    loadChildren: () =>
-      import('@pages/cart/cart.module').then((m) => m.CartModule),
+    path: Path.App,
+    canActivate: [AuthGuard],
+    children: [
+      {
+        path: Path.Products,
+        loadChildren: () =>
+          import('@pages/products/products.module').then(
+            (m) => m.ProductsModule,
+          ),
+      },
+      {
+        path: Path.Cart,
+        loadChildren: () =>
+          import('@pages/cart/cart.module').then((m) => m.CartModule),
+      },
+    ],
   },
   {
     path: '**',

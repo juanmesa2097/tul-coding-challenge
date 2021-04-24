@@ -32,10 +32,17 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "src/public"
+              "src/public",
+              {
+                "glob": "**/*",
+                "input": "node_modules/@taiga-ui/icons/src",
+                "output": "assets/taiga-ui/icons"
+              }
             ],
             "styles": [
-              "src/theme/styles.scss"
+              "src/theme/styles.scss",
+              "node_modules/@taiga-ui/core/styles/taiga-ui-global.less",
+              "node_modules/@taiga-ui/core/styles/taiga-ui-theme.less"
             ],
             "scripts": []
           },
@@ -70,9 +77,7 @@
               "ngswConfigPath": "ngsw-config.json"
             },
             "es": {
-              "localize": [
-                "es"
-              ]
+              "localize": ["es"]
             }
           }
         },
@@ -101,23 +106,15 @@
           "options": {
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
-            "assets": [
-              "src/public/favicon.ico",
-              "src/assets"
-            ],
-            "styles": [
-              "src/theme/styles.scss"
-            ],
+            "assets": ["src/public/favicon.ico", "src/assets"],
+            "styles": ["src/theme/styles.scss"],
             "scripts": []
           }
         },
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": [
-              "src/**/*.ts",
-              "src/**/*.html"
-            ]
+            "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
           }
         },
         "e2e": {

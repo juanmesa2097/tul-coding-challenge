@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { Path } from '@app/@core/structs';
 import { SignOutPage } from './sign-out.page';
 
 @NgModule({
@@ -10,7 +9,7 @@ import { SignOutPage } from './sign-out.page';
     CommonModule,
     RouterModule.forChild([
       {
-        path: Path.SignOut,
+        path: '',
         component: SignOutPage,
       },
     ]),

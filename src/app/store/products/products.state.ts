@@ -3,7 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { FirestoreCollection } from '@app/@core/structs/firestore-collection.enum';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { take, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { StateName } from '../state-name.enum';
 import { ProductsActions } from './products.actions';
 import { Product } from './products.model';
@@ -25,13 +25,13 @@ export class ProductsState {
   constructor(private firestore: AngularFirestore) {}
 
   @Selector()
-  static fetchProductsList(state: ProductsStateModel): Product[] {
-    return state.products;
+  static fetchProductsList({ products }: ProductsStateModel): Product[] {
+    return products;
   }
 
   @Selector()
-  static isLoading(state: ProductsStateModel): boolean {
-    return state.isLoading;
+  static isLoading({ isLoading }: ProductsStateModel): boolean {
+    return isLoading;
   }
 
   @Action(ProductsActions.Fetch)
@@ -45,9 +45,6 @@ export class ProductsState {
     return this.firestore
       .collection<Product>(FirestoreCollection.Products)
       .valueChanges()
-      .pipe(
-        take(1),
-        tap((products) => patchState({ products, isLoading: false })),
-      );
+      .pipe(tap((products) => patchState({ products, isLoading: false })));
   }
 }

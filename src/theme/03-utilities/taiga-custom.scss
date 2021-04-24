@@ -1,0 +1,16 @@
+tui-wrapper[data-appearance='danger'] {
+  background: theme('colors.red.200');
+  color: theme('colors.red.500');
+
+  &[data-state='hovered'] {
+    background: theme('colors.red.100');
+  }
+
+  &[data-state='pressed'] {
+    background: theme('colors.red.300');
+  }
+
+  &[data-state='disabled'] {
+    background: theme('colors.red.50');
+  }
+}

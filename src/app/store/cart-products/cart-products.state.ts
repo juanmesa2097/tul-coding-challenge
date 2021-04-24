@@ -139,9 +139,11 @@ export class CartProductsState {
 
     const { cartId, productId } = payload;
 
+    const id = this.firestore.createId();
+
     this.firestore
       .collection(FirestoreCollection.CartProducts)
-      .doc(`${cartId}_${productId}`)
+      .doc(id)
       .set({
         ...payload,
         cartId,

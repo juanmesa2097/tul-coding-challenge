@@ -1,13 +1,17 @@
 <ul class="space-y-4">
   <li
     *ngFor="let product of products; trackBy: trackByProductId"
-    class="p-4 border-b border-gray-400"
+    class="px-0 py-4 border-b border-gray-400 md:px-4"
   >
-    <div class="flex items-center justify-between mb-6">
+    <div
+      class="flex flex-col items-center justify-center mb-6 md:justify-between md:flex-row"
+    >
       <!-- left -->
-      <div class="flex items-center">
+      <div class="flex flex-col items-center md:flex-row">
         <!-- image -->
-        <div class="grid w-16 h-16 bg-gray-400 rounded-full place-items-center">
+        <div
+          class="grid w-16 h-16 mb-4 bg-gray-400 rounded-full place-items-center md:mb-0"
+        >
           <img
             src="../../../../assets/img-placeholder.png"
             alt="Image placeholder"
@@ -15,7 +19,7 @@
         </div>
         <!-- /image -->
 
-        <div class="ml-4">
+        <div class="ml-4 text-center">
           <h3 class="block m-0 text-lg font-semibold">
             {{ product?.name }}
           </h3>
@@ -35,7 +39,7 @@
       <!-- /right -->
     </div>
 
-    <div class="flex justify-end items center">
+    <div class="flex items-center justify-center md:justify-end">
       <button
         tuiButton
         appearance="danger"

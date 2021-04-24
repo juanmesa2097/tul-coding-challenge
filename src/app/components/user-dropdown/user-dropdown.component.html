@@ -1,0 +1,55 @@
+<span (tuiActiveZoneChange)="onActiveZone($event)">
+  <!-- button -->
+  <button
+    tuiDropdownAlign="right"
+    tuiDropdownDirection="top"
+    [tuiDropdown]="open"
+    [tuiDropdownContent]="dropdownContent"
+    (tuiObscured)="onObscured($event)"
+    (click)="open = !open"
+  >
+    <tui-avatar
+      [rounded]="true"
+      [autoColor]="true"
+      [text]="userInfo.fullName"
+    ></tui-avatar>
+  </button>
+
+  <!-- /button -->
+
+  <!-- dropdown -->
+  <ng-template #dropdownContent>
+    <ul class="w-64">
+      <li class="flex items-center p-3">
+        <tui-avatar
+          size="s"
+          [rounded]="true"
+          [autoColor]="true"
+          [text]="userInfo.fullName"
+        ></tui-avatar>
+        <div class="flex flex-col ml-3">
+          <span class="block mb-1 text-gray-500">
+            {{ userInfo.fullName }}
+          </span>
+          <span class="block text-gray-500">
+            {{ userInfo.email }}
+          </span>
+        </div>
+      </li>
+      <li class="flex items-center p-3">
+        <button
+          type="button"
+          tuiButton
+          icon="tuiIconArrowLeft"
+          appearance="secondary"
+          size="s"
+          class="w-full text-white"
+          (click)="onClickSignOut()"
+        >
+          Sign out
+        </button>
+      </li>
+    </ul>
+  </ng-template>
+  <!-- /dropdown -->
+</span>

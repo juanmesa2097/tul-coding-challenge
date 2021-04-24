@@ -1,0 +1,29 @@
+<svg id="logo_tul_color" xmlns="http://www.w3.org/2000/svg" width="54.008" height="17.573" viewBox="0 0 54.008 17.573">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #005b56;
+      }
+
+      .cls-2 {
+        fill: #53edba;
+      }
+
+      .cls-3 {
+        fill: #fff800;
+      }
+    </style>
+  </defs>
+  <path id="Trazado_533" data-name="Trazado 533" class="cls-1" d="M276.966,27.8h-5.432V15.822c.006-1.5.022-3.253.022-4.908H281.57v4.862h-4.6Z" transform="translate(-264.356 -10.625)"/>
+  <path id="Trazado_534" data-name="Trazado 534" class="cls-1" d="M1383.128,22.524h-.008V10.557h-5.4V27.441h5.4Z" transform="translate(-1341.3 -10.278)"/>
+  <rect id="Rectángulo_346" data-name="Rectángulo 346" class="cls-1" width="5.939" height="4.917" transform="translate(43.53 12.246)"/>
+  <rect id="Rectángulo_347" data-name="Rectángulo 347" class="cls-1" width="5.478" height="4.862" transform="translate(0 0.288)"/>
+  <g id="Grupo_1664" data-name="Grupo 1664" transform="translate(18.965)">
+    <path id="Trazado_535" data-name="Trazado 535" class="cls-1" d="M1105.99,259.185v10.452c.371-.083.741-.184,1.109-.305a5.655,5.655,0,0,0,3.879-3.894,11.185,11.185,0,0,0,.435-2.908c.019-1.115.026-2.23.028-3.345Z" transform="translate(-1095.716 -252.333)"/>
+    <path id="Trazado_536" data-name="Trazado 536" class="cls-2" d="M1109.806,2.741A2.741,2.741,0,1,1,1107.064,0a2.741,2.741,0,0,1,2.741,2.741" transform="translate(-1094.093)"/>
+    <path id="Trazado_537" data-name="Trazado 537" class="cls-3" d="M723,2.741A2.741,2.741,0,1,1,720.255,0,2.741,2.741,0,0,1,723,2.741" transform="translate(-717.51)"/>
+    <path id="Trazado_538" data-name="Trazado 538" class="cls-1" d="M725.768,264.612c-1.321.2-2.322-.184-2.72-1.17a4.356,4.356,0,0,1-.265-1.564q-.012-1.348-.013-2.7h-5.4v3.22q.017.581.041,1.161a6.021,6.021,0,0,0,4.876,5.944,11.245,11.245,0,0,0,3.656.373v-5.307c-.057.013-.111.03-.171.039" transform="translate(-717.366 -252.331)"/>
+  </g>
+  <path id="Trazado_539" data-name="Trazado 539" class="cls-1" d="M1945.063,605.164h-.4v-.231h1.077v.231h-.4v.909h-.286Z" transform="translate(-1893.255 -588.94)"/>
+  <path id="Trazado_540" data-name="Trazado 540" class="cls-1" d="M1993.71,604.935h.308l.342.482.342-.482h.308v1.14h-.284v-.744l-.366.487h-.007l-.362-.482v.739h-.28Z" transform="translate(-1941.002 -588.942)"/>
+</svg>

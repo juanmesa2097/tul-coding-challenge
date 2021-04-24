@@ -1,10 +1,22 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import {
+  TuiButtonModule,
+  TuiLoaderModule,
+  TuiNotificationModule,
+} from '@taiga-ui/core';
+import {
+  TuiFieldErrorModule,
+  TuiInputModule,
+  TuiInputPasswordModule,
+} from '@taiga-ui/kit';
+import { RegisterFormComponent } from './register-form/register-form.component';
 import { SignUpPage } from './sign-up.page';
 
 @NgModule({
-  declarations: [SignUpPage],
+  declarations: [SignUpPage, RegisterFormComponent],
   imports: [
     CommonModule,
     RouterModule.forChild([
@@ -19,6 +31,13 @@ import { SignUpPage } from './sign-up.page';
         },
       },
     ]),
+    ReactiveFormsModule,
+    TuiInputModule,
+    TuiInputPasswordModule,
+    TuiFieldErrorModule,
+    TuiButtonModule,
+    TuiLoaderModule,
+    TuiNotificationModule,
   ],
 })
 export class SignUpModule {}

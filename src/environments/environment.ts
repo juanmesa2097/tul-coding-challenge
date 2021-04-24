@@ -5,6 +5,15 @@
 export const environment = {
   production: false,
   apiUrl: 'http://localhost:3000/api/v1',
+  firebase: {
+    apiKey: 'AIzaSyC39g1eGeJdbgGqSG1NZJaekvfbMif7qYs',
+    authDomain: 'tul-shop.firebaseapp.com',
+    projectId: 'tul-shop',
+    storageBucket: 'tul-shop.appspot.com',
+    messagingSenderId: '376593416745',
+    appId: '1:376593416745:web:d19c9fe062cb97af22d238',
+    measurementId: 'G-LNJM5X87CN',
+  },
 };
 
 /*

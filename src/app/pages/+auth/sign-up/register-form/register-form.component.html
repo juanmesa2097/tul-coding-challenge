@@ -1,0 +1,64 @@
+<!-- form -->
+<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+  <!-- field -->
+  <div class="mt-5">
+    <tui-input formControlName="email">
+      Email
+      <span class="tui-required"></span>
+    </tui-input>
+    <tui-field-error formControlName="email"></tui-field-error>
+  </div>
+  <!-- /field -->
+
+  <!-- field -->
+  <div class="mt-5">
+    <tui-input formControlName="name">
+      Nombres
+      <span class="tui-required"></span>
+    </tui-input>
+    <tui-field-error formControlName="name"></tui-field-error>
+  </div>
+  <!-- /field -->
+
+  <!-- field -->
+  <div class="mt-5">
+    <tui-input formControlName="lastname">
+      Apellidos
+      <span class="tui-required"></span>
+    </tui-input>
+    <tui-field-error formControlName="lastname"></tui-field-error>
+  </div>
+  <!-- /field -->
+
+  <!-- field -->
+  <div class="mt-5">
+    <tui-input-password formControlName="password">
+      Contraseña
+      <span class="tui-required"></span>
+    </tui-input-password>
+    <tui-field-error formControlName="password"></tui-field-error>
+  </div>
+  <!-- /field -->
+
+  <!-- field -->
+  <div class="mt-5">
+    <tui-input-password formControlName="passwordConfirm">
+      Confirmar contraseña
+      <span class="tui-required"></span>
+    </tui-input-password>
+    <tui-field-error formControlName="passwordConfirm"></tui-field-error>
+  </div>
+  <!-- /field -->
+
+  <!-- button -->
+  <button
+    tuiButton
+    type="submit"
+    appearance="primary"
+    class="inline-flex w-full mt-5"
+  >
+    Crear cuenta
+  </button>
+  <!-- /button -->
+</form>
+<!-- /form -->

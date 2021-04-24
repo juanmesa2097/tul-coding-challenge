@@ -4,4 +4,4 @@ export enum ThemeList {
   Dark = 'dark',
 }
 
-export const defaultBaseTheme = ThemeList.System;
+export const defaultBaseTheme = ThemeList.Light;

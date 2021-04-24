@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { AuthService } from '@app/pages/+auth/_services/auth.service';
 import { SeoService } from '@core/services/seo';
 import { ThemeService } from '@core/services/theme';
-import { Path } from '@core/structs';
-import { Observable } from 'rxjs';
+import { Store } from '@ngxs/store';
+import { CartProductsActions } from './store/cart-products/cart-products.actions';
+import { CartActions } from './store/cart/cart.actions';
+import { CartState } from './store/cart/cart.state';
+import { UserState } from './store/user/users.state';
 
 @Component({
   selector: 'app-root',
@@ -12,23 +13,35 @@ import { Observable } from 'rxjs';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  isLoggedIn$!: Observable<boolean>;
+  isLoggedIn!: boolean;
 
   constructor(
-    private router: Router,
     private seoService: SeoService,
     private themeService: ThemeService,
-    private authService: AuthService,
+    private store: Store,
   ) {}
 
   ngOnInit(): void {
     this.seoService.init();
     this.themeService.init();
-    this.isLoggedIn$ = this.authService.isLoggedIn$;
-  }
 
-  onLogout(): void {
-    this.authService.signOut();
-    this.router.navigate([`/${Path.SignIn}`]);
+    this.store.select(UserState.isLoggedIn).subscribe((isLoggedIn) => {
+      this.isLoggedIn = isLoggedIn;
+
+      // Fetch cart when user is logged
+      if (isLoggedIn) {
+        const userId = this.store.selectSnapshot(UserState.user)?.id;
+
+        if (userId) {
+          this.store.dispatch(new CartActions.Fetch(userId));
+
+          const cartId = this.store.selectSnapshot(CartState.cartId);
+
+          if (cartId) {
+            this.store.dispatch(new CartProductsActions.Fetch(cartId));
+          }
+        }
+      }
+    });
   }
 }

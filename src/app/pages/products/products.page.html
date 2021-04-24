@@ -1,0 +1,27 @@
+<!-- page header -->
+<div class="w-full h-52 bg-gradient-to-br from-green-300 to-yellow-200">
+  <div class="container flex flex-col mb-16">
+    <h1 class="mb-0 text-6xl text-white">Productos</h1>
+    <tui-breadcrumbs [items]="breadcrumbs"></tui-breadcrumbs>
+  </div>
+</div>
+<!-- /page header -->
+
+<!-- container -->
+<div class="container my-16">
+  <h2>Las mejores ofertas 🔥</h2>
+
+  <!-- list -->
+  <tui-loader
+    [overlay]="true"
+    size="xxl"
+    [showLoader]="(fetchLoading$ | async) || addLoading"
+  >
+    <app-products-list
+      [products]="products$ | async"
+      (addToCart)="onAddToCart($event)"
+    ></app-products-list>
+  </tui-loader>
+  <!-- /list -->
+</div>
+<!-- /container -->
